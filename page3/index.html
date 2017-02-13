@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" class="index">
+    <script>
+     addEventListener('WebComponentsReady', function() {
+         var menuBtn=document.querySelector('#menuBtn');
+         var menu=document.querySelector('#menu');
+         console.log(menuBtn,menu);
+         $(menuBtn).on('click',function(){
+             menu.open();
+         });
+     });
+    </script>
+    <head>
+    <script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"> 
+    </script>
+    <script src="/js/jq.min.js">
+    </script>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    
+      chira.ga &middot; rora
+    
+  </title>
+
+  <link rel="import" href="bower_components/app-layout/app-drawer/app-drawer.html">
+  <link rel="import" href="bower_components/app-layout/app-header/app-header.html">
+  <link rel="import" href="bower_components/app-layout/app-toolbar/app-toolbar.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="alternate" type="application/atom+xml" title="chira.ga" href="/atom.xml">
+</head>
+
+
+    <body>
+        <app-header fixed>
+            <app-toolbar>
+                <paper-icon-button icon="menu" id="menuBtn"></paper-icon-button>
+                <div main-title>App name</div>
+            </app-toolbar>
+        </app-header>
+
+        <!--div class="masthead"-->
+    <!--div class="blur"-->
+    <!--/div-->
+    <!--div id="menu-icon" onclick="menuToggle()"-->
+        <!--span></span-->
+        <!--span></span-->
+        <!--span></span-->
+        <!--span></span-->
+    <!--/div-->
+<!--/div-->
+
+<div class="front">
+    <center>
+        <span style="color:black;">chira.ga</span><span>rora</span>
+    </center>
+</div>
+
+<div class="posts">
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/whats-jekyll/">
+        What's Jekyll?
+      </a>
+    </h1>
+
+    <time datetime="2016-01-01T00:00:00+05:30" class="post-date">01 Jan 2016
+     • <a href="/whats-jekyll/#disqus_thread">0 Comments</a>
+    </time>
+
+    <p><a href="http://jekyllrb.com">Jekyll</a> is a static site generator, an open-source tool for creating simple yet powerful websites of all shapes and sizes. From <a href="https://github.com/jekyll/jekyll/blob/master/README.markdown">the project’s readme</a>:</p>
+
+<blockquote>
+  <p>Jekyll is a simple, blog aware, static site generator. It takes a template directory […] and spits out a complete, static website suitable for serving with Apache or your favorite web server. This is also the engine behind GitHub Pages, which you can use to host your project’s page or blog right here from GitHub.</p>
+</blockquote>
+
+<p>It’s an immensely useful tool. Find out more by <a href="https://github.com/jekyll/jekyll">visiting the project on GitHub</a>.</p>
+
+  </article>
+  
+</div>
+
+<div class="pagination">
+  
+    <span class="pagination-item older">Older</span>
+  
+  
+    <a class="pagination-item newer" href="/page2">Newer</a>
+  
+</div>
+
+
+        <app-drawer id="menu"></app-drawer>
+    </body>
+</html>

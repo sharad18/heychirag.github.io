@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"> 
+    </script>
+    <script src="/js/jq.min.js">
+    </script>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    
+       &middot; chira.ga
+    
+  </title>
+
+  <link rel="import" href="bower_components/app-layout/app-drawer/app-drawer.html">
+  <link rel="import" href="bower_components/app-layout/app-header/app-header.html">
+  <link rel="import" href="bower_components/app-layout/app-toolbar/app-toolbar.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="alternate" type="application/atom+xml" title="chira.ga" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="container content">
+      <header class="masthead">
+        <h3 class="masthead-title">
+          <a href="/" title="Home">chira.ga</a>
+          <small>rora</small>
+        </h3>
+      </header>
+
+      <main>
+        <article class="page">
+  <h1 class="page-title"></h1>
+  <h2 id="running-pouchdb-tests">Running PouchDB Tests</h2>
+
+<p>The PouchDB test suite expects an instance of CouchDB (version 1.6.1 and above) running in <a href="http://guide.couchdb.org/draft/security.html#party">Admin Party</a> on http://127.0.0.1:5984 with <a href="https://github.com/pouchdb/add-cors-to-couchdb">CORS enabled</a>, you can configure this by sending the <code class="highlighter-rouge">COUCH_HOST</code> env var.</p>
+
+<ul>
+  <li>PouchDB has been primarily developed on Linux and OSX, if you are using Windows then these instructions will have problems, we would love your help fixing them though.</li>
+</ul>
+
+<h3 id="node-tests">Node Tests</h3>
+
+<p>Given that you have <a href="#installing-a-couchdb-server">installed a CouchDB server</a>.</p>
+
+<p>Run all tests with:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ npm test
+</code></pre>
+</div>
+
+<h3 id="browser-tests">Browser Tests</h3>
+
+<p>Browser tests can be run automatically with:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ CLIENT=selenium:firefox npm test
+</code></pre>
+</div>
+
+<p>or you can run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ npm run dev
+</code></pre>
+</div>
+
+<p>and open <a href="http://127.0.0.1:8000/tests/integration/index.html">http://127.0.0.1:8000/tests/integration/index.html</a> in your browser of choice. The performance tests are located @ <a href="http://localhost:8000/tests/performance/index.html">http://localhost:8000/tests/performance/index.html</a>.</p>
+
+<p>You can also test against phantomjs, but you’ll need to install phantomjs yourself:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ npm install phantomjs-prebuilt
+$ CLIENT=selenium:phantomjs npm test
+</code></pre>
+</div>
+
+<h3 id="unit-tests">Unit tests</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ npm run build-as-modular-es5
+$ npm run test-unit
+</code></pre>
+</div>
+
+<p>These are tests that confirm small parts of PouchDB functionality. In order to
+work correctly with ES6, they are first transpiled to <code class="highlighter-rouge">lib</code> as modular ES5 (<code class="highlighter-rouge">run run build-as-modular-es5</code>) using Babel, and then tested as CommonJS modules. See <code class="highlighter-rouge">build-as-modular-es5.sh</code> for details.</p>
+
+<h3 id="test-options">Test Options</h3>
+
+<h4 id="subset-of-tests">Subset of tests:</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ GREP=test.replication.js npm test
+</code></pre>
+</div>
+
+<p>or append <code class="highlighter-rouge">?grep=test.replication.js</code> if you opened the tests in a browser manually.</p>
+
+<h4 id="test-coverage">Test Coverage</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ npm run test-coverage
+</code></pre>
+</div>
+
+<p>Again, this uses <code class="highlighter-rouge">npm run build-as-modular-es5</code> in order to fully test the codebase
+as a non-bundle. See <code class="highlighter-rouge">build-as-modular-es5.sh</code> for details.</p>
+
+<h4 id="test-alternative-server">Test alternative server</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ COUCH_HOST=http://user:pass@myname.host.com npm run dev
+</code></pre>
+</div>
+
+<p>or</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ COUCH_HOST=http://user:pass@myname.host.com npm test
+</code></pre>
+</div>
+
+<h4 id="other-test-options">Other test options</h4>
+
+<ul>
+  <li><code class="highlighter-rouge">SKIP_MIGRATION=1</code> should be used to skip the migration tests.</li>
+  <li><code class="highlighter-rouge">NEXT=1</code> will test pouchdb-next (PouchDB with v2 IndexedDB adapter).</li>
+  <li><code class="highlighter-rouge">POUCHDB_SRC=../../dist/pouchdb.js</code> can be used to treat another file as the PouchDB source file.</li>
+  <li><code class="highlighter-rouge">npm run test-webpack</code> will build with Webpack and then test that in a browser.</li>
+</ul>
+
+<h4 id="test-against-custom-firefox">Test against custom Firefox</h4>
+
+<p>You can specify a custom Firefox path using <code class="highlighter-rouge">FIREFOX_BIN</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ FIREFOX_BIN=/path/to/firefox npm run test-browser
+</code></pre>
+</div>
+
+<h4 id="run-the-mapreduce-tests">Run the map/reduce tests</h4>
+
+<p>The map/reduce tests are done separately from the normal integration tests, because
+they take a long time. They’ll also cause a ton of popups in Safari due to exceeding
+the 5MB limit.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ TYPE=mapreduce npm test
+</code></pre>
+</div>
+
+<h3 id="testing-against-pouchdb-server">Testing against PouchDB server</h3>
+
+<p><a href="https://github.com/nick-thompson/pouchdb-server">pouchdb-server</a> is a project that uses <a href="https://github.com/nick-thompson/express-pouchdb">express-pouchdb</a> to run a CouchDB-compliant server backed by PouchDB.</p>
+
+<p>To test the latest and greatest version of pouchdb-server, you can do e.g.:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>SERVER=pouchdb-server npm test
+SERVER=pouchdb-server CLIENT=selenium:firefox npm test
+</code></pre>
+</div>
+
+<p>If you would like to modify pouchdb-server while testing, then git clone the express-pouchdb and pouchdb-server projects, <code class="highlighter-rouge">npm link</code> them all together, and then run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    node /path/to/pouchdb-server/bin/pouchdb-server -p 6984
+</code></pre>
+</div>
+
+<p>Then in the PouchDB project, run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>COUCH_HOST=http://localhost:6984 npm run dev
+</code></pre>
+</div>
+
+<p>This works because <code class="highlighter-rouge">npm run dev</code> does not start up the pouchdb-server itself (only <code class="highlighter-rouge">npm test</code> does).</p>
+
+<p>Note that you must <code class="highlighter-rouge">npm install pouchdb-server</code> or <code class="highlighter-rouge">npm install express-pouchdb</code> yourself for this test to work.</p>
+
+<h3 id="testing-different-node-adapters">Testing different Node adapters</h3>
+
+<p>Use this option to test the in-memory adapter:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ADAPTER=memory
+</code></pre>
+</div>
+
+<p>To run the node-websql test in Node, run the tests with:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ADAPTER=websql
+</code></pre>
+</div>
+
+<h3 id="testing-fetch-vs-xmlhttprequest">Testing fetch vs XMLHttpRequest</h3>
+
+<p>PouchDB falls back to either XHR or fetch, whichever is available. You can test fetch-only using:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>FETCH=1 npm test
+</code></pre>
+</div>
+
+<h3 id="performance-tests">Performance tests</h3>
+
+<p>To run the performance test suite in node.js:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PERF=1 npm test
+</code></pre>
+</div>
+
+<p>Or the automated browser runner:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PERF=1 CLIENT=selenium:firefox npm test
+</code></pre>
+</div>
+
+<p>You can also use <code class="highlighter-rouge">GREP</code> to run certain tests:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PERF=1 GREP=basic-inserts npm test
+</code></pre>
+</div>
+
+<p>You can also use <code class="highlighter-rouge">LEVEL_ADAPTER</code> to use a certain “DOWN” adapter:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PERF=1 LEVEL_ADAPTER=memdown npm test
+</code></pre>
+</div>
+
+<p>You can also test against node-websql:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PERF=1 ADAPTER=websql npm test
+</code></pre>
+</div>
+
+<p>You can also override the default number of iterations:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>PERF=1 ITERATIONS=10 npm t
+</code></pre>
+</div>
+
+<h3 id="performance-tests-in-the-browser">Performance tests in the browser</h3>
+
+<p>When you run <code class="highlighter-rouge">npm run dev</code>, performance tests are available at:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:8000/tests/performance/index.html
+</code></pre>
+</div>
+
+<p>You can specify a particular version of PouchDB or a particular adapter by doing e.g.:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:8000/tests/performance/index.html?src=http://site.com/path/to/pouchdb.js
+http://localhost:8000/tests/performance/index.html?adapter=websql
+http://localhost:8000/tests/performance/index.html?adapter=idb&amp;src=//site.com/pouchdb.js
+</code></pre>
+</div>
+
+<p>All of the browser plugin adapters (i.e. <code class="highlighter-rouge">fruitdown</code>, <code class="highlighter-rouge">memory</code>, and <code class="highlighter-rouge">localstorage</code>) are also available this way.</p>
+
+<p>You can also specify particular tests by using <code class="highlighter-rouge">grep=</code>, e.g.:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://127.0.0.1:8000/tests/performance/index.html?grep=basics
+http://127.0.0.1:8000/tests/performance/index.html?grep=basic-inserts
+</code></pre>
+</div>
+
+<p>You can also override the default number of iterations using <code class="highlighter-rouge">iterations=</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://127.0.0.1:8000/tests/performance/index.html?grep=basic-insert&amp;interations=10
+</code></pre>
+</div>
+
+<h3 id="ad-hoc-tests">Ad-hoc tests</h3>
+
+<p>There’s a WebSQL storage quota test available in:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://127.0.0.1:8000/tests/stress/websql_storage_limit.html
+</code></pre>
+</div>
+
+<p>Run <code class="highlighter-rouge">npm run dev</code>, then open it in Safari or iOS.</p>
+
+<h3 id="build-tests">Build tests</h3>
+
+<p>To verify that the build was done correctly, there are some tests here:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>npm run verify-build
+</code></pre>
+</div>
+
+<h2 id="adapter-plugins-and-adapter-order">Adapter plugins and adapter order</h2>
+
+<p>We are currently building three adapters-as-plugins: <code class="highlighter-rouge">fruitdown</code>, <code class="highlighter-rouge">memory</code> and <code class="highlighter-rouge">localstorage</code>.  All are based on the <a href="https://github.com/rvagg/abstract-leveldown">LevelDOWN API</a>:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">fruitdown</code>: based on <a href="https://github.com/nolanlawson/fruitdown">FruitDOWN</a></li>
+  <li><code class="highlighter-rouge">memory</code>: based on <a href="https://github.com/rvagg/memdown">MemDOWN</a></li>
+  <li><code class="highlighter-rouge">localstorage</code>: based on <a href="https://github.com/no9/localstorage-down">localstorage-down</a></li>
+</ul>
+
+<p>These adapters are built and included in the <code class="highlighter-rouge">dist/</code> folder as e.g. <code class="highlighter-rouge">pouchdb.memory.js</code>.  Including these scripts after <code class="highlighter-rouge">pouchdb.js</code> will load the adapters, placing them in the <code class="highlighter-rouge">PouchDB.preferredAdapters</code> list after <code class="highlighter-rouge">idb</code> and <code class="highlighter-rouge">websql</code> by default.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script src="pouchdb.js"&gt;&lt;/script&gt;
+&lt;script&gt;console.log(PouchDB.preferredAdapters); // ['idb', 'websql']&lt;/script&gt;
+&lt;script src="pouchdb.memory.js"&gt;&lt;/script&gt;
+&lt;script&gt;console.log(PouchDB.preferredAdapters); // ['idb', 'websql', 'memory']&lt;/script&gt;
+</code></pre>
+</div>
+
+<p>To test these adapters, you can run e.g.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ADAPTERS=memory CLIENT=selenium:firefox npm run test
+</code></pre>
+</div>
+
+<p>Or append them as query params in the browser:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:8000/tests/index.html?adapters=memory
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">adapters</code> list is a comma-separated list that will be used for <code class="highlighter-rouge">PouchDB.preferredAdapters</code>.  So e.g. if you want to test <code class="highlighter-rouge">websql</code> in Chrome, you can do:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>http://localhost:8000/tests/index.html?adapters=websql
+</code></pre>
+</div>
+
+<p>Or even make the <code class="highlighter-rouge">preferredAdapters</code> list anything you want:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># loads websql, then memory, then idb, then localstorage
+http://localhost:8000/tests/index.html?adapters=websql,memory,idb,localstorage
+</code></pre>
+</div>
+
+<p>Keep in mind that <code class="highlighter-rouge">preferredAdapters</code> only applies to non-http, non-https adapters.</p>
+
+<h3 id="installing-a-couchdb-server">Installing a CouchDB server</h3>
+
+<h2 id="regular-install">Regular install</h2>
+
+<p>See the <a href="http://docs.couchdb.org/en/1.6.1/install/index.html">official CouchDB documentation</a> for a guide on how to install CouchDB.</p>
+
+</article>
+
+      </main>
+
+      <footer class="footer">
+        <small>
+          &copy; <time datetime="2017-02-13T23:53:47+05:30">2017</time>. All rights reserved.
+        </small>
+      </footer>
+    </div>
+
+    
+     <script id="dsq-count-scr" src="//chiraga.disqus.com/count.js" async>
+     </script>
+  </body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"> 
+    </script>
+    <script src="/js/jq.min.js">
+    </script>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    
+      Markdown is broken &middot; chira.ga
+    
+  </title>
+
+  <link rel="import" href="bower_components/app-layout/app-drawer/app-drawer.html">
+  <link rel="import" href="bower_components/app-layout/app-header/app-header.html">
+  <link rel="import" href="bower_components/app-layout/app-toolbar/app-toolbar.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="alternate" type="application/atom+xml" title="chira.ga" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <div class="container content">
+      <header class="masthead">
+        <h3 class="masthead-title">
+          <a href="/" title="Home">chira.ga</a>
+          <small>rora</small>
+        </h3>
+      </header>
+
+      <main>
+        <article class="page">
+  <h1 class="page-title">Markdown is broken</h1>
+  <h1 id="markdown-is-broken">Markdown is broken</h1>
+
+<p>I have a lot of scraps of markdown engine oddities that I’ve collected over the
+years. What you see below is slightly messy, but it’s what I’ve managed to
+cobble together to illustrate the differences between markdown engines, and
+why, if there ever is a markdown specification, it has to be absolutely
+thorough. There are a lot more of these little differences I have documented
+elsewhere. I know I will find them lingering on my disk one day, but until
+then, I’ll continue to add whatever strange nonsensical things I find.</p>
+
+<p>Some of these examples may only mention a particular engine compared to marked.
+However, the examples with markdown.pl could easily be swapped out for
+discount, upskirt, or markdown.js, and you would very easily see even more
+inconsistencies.</p>
+
+<p>A lot of this was written when I was very unsatisfied with the inconsistencies
+between markdown engines. Please excuse the frustration noticeable in my
+writing.</p>
+
+<h2 id="examples-of-markdowns-stupid-list-parsing">Examples of markdown’s “stupid” list parsing</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ markdown.pl
+
+  * item1
+
+    * item2
+
+  text
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;item1&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;p&gt;text&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ marked
+  * item1
+
+    * item2
+
+  text
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;item1&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;text&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<p>Which looks correct to you?</p>
+
+<hr />
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ markdown.pl
+* hello
+  &gt; world
+^D
+&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;hello&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;world&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ marked
+* hello
+  &gt; world
+^D
+&lt;ul&gt;
+&lt;li&gt;hello&lt;blockquote&gt;
+&lt;p&gt;world&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<p>Again, which looks correct to you?</p>
+
+<hr />
+
+<p>EXAMPLE:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ markdown.pl
+* hello
+  * world
+    * hi
+          code
+^D
+&lt;ul&gt;
+&lt;li&gt;hello
+&lt;ul&gt;
+&lt;li&gt;world&lt;/li&gt;
+&lt;li&gt;hi
+  code&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<p>The code isn’t a code block even though it’s after the bullet margin. I know,
+lets give it two more spaces, effectively making it 8 spaces past the bullet.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ markdown.pl
+* hello
+  * world
+    * hi
+            code
+^D
+&lt;ul&gt;
+&lt;li&gt;hello
+&lt;ul&gt;
+&lt;li&gt;world&lt;/li&gt;
+&lt;li&gt;hi
+    code&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<p>And, it’s still not a code block. Did you also notice that the 3rd item isn’t
+even its own list? Markdown screws that up too because of its indentation
+unaware parsing.</p>
+
+<hr />
+
+<p>Let’s look at some more examples of markdown’s list parsing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ markdown.pl
+
+  * item1
+
+    * item2
+
+  text
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;item1&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;p&gt;text&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+</code></pre>
+</div>
+
+<p>Misnested tags.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ marked
+  * item1
+
+    * item2
+
+  text
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;item1&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;text&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<p>Which looks correct to you?</p>
+
+<hr />
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ markdown.pl
+* hello
+  &gt; world
+^D
+&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;hello&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;world&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</code></pre>
+</div>
+
+<p>More misnested tags.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ marked
+* hello
+  &gt; world
+^D
+&lt;ul&gt;
+&lt;li&gt;hello&lt;blockquote&gt;
+&lt;p&gt;world&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<p>Again, which looks correct to you?</p>
+
+<hr />
+
+<h1 id="why-quality-matters---part-2">Why quality matters - Part 2</h1>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>markdown.pl
+<span class="k">*</span> hello
+  &gt; world
+^D
+&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;hello&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;world&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>sundown <span class="c"># upskirt</span>
+<span class="k">*</span> hello
+  &gt; world
+^D
+&lt;ul&gt;
+&lt;li&gt;hello
+&amp;gt; world&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>marked
+<span class="k">*</span> hello
+  &gt; world
+^D
+&lt;ul&gt;&lt;li&gt;hello &lt;blockquote&gt;&lt;p&gt;world&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ul&gt;
+</code></pre>
+</div>
+
+<p>Which looks correct to you?</p>
+
+<hr />
+
+<p>See: https://github.com/evilstreak/markdown-js/issues/23</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>markdown.pl <span class="c"># upskirt/markdown.js/discount</span>
+<span class="k">*</span> hello
+      var a <span class="o">=</span> 1;
+<span class="k">*</span> world
+^D
+&lt;ul&gt;
+&lt;li&gt;hello
+var a <span class="o">=</span> 1;&lt;/li&gt;
+&lt;li&gt;world&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>marked
+<span class="k">*</span> hello
+      var a <span class="o">=</span> 1;
+<span class="k">*</span> world
+^D
+&lt;ul&gt;&lt;li&gt;hello
+&lt;pre&gt;code&gt;var a <span class="o">=</span> 1;&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;world&lt;/li&gt;&lt;/ul&gt;
+</code></pre>
+</div>
+
+<p>Which looks more reasonable? Why shouldn’t code blocks be able to appear in
+list items in a sane way?</p>
+
+<hr />
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>markdown.js
+&lt;div&gt;hello&lt;/div&gt;
+
+&lt;span&gt;hello&lt;/span&gt;
+^D
+&lt;p&gt;&amp;lt;div&amp;gt;hello&amp;lt;/div&amp;gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;lt;span&amp;gt;hello&amp;lt;/span&amp;gt;&lt;/p&gt;
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>marked
+&lt;div&gt;hello&lt;/div&gt;
+
+&lt;span&gt;hello&lt;/span&gt;
+^D
+&lt;div&gt;hello&lt;/div&gt;
+
+
+&lt;p&gt;&lt;span&gt;hello&lt;/span&gt;
+&lt;/p&gt;
+</code></pre>
+</div>
+
+<hr />
+
+<p>See: https://github.com/evilstreak/markdown-js/issues/27</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>markdown.js
+<span class="o">[</span>![an image]<span class="o">(</span>/image<span class="o">)](</span>/link<span class="o">)</span>
+^D
+&lt;p&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">"/image)](/link"</span>&gt;![an image&lt;/a&gt;&lt;/p&gt;
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>marked
+<span class="o">[</span>![an image]<span class="o">(</span>/image<span class="o">)](</span>/link<span class="o">)</span>
+^D
+&lt;p&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">"/link"</span>&gt;&lt;img <span class="nv">src</span><span class="o">=</span><span class="s2">"/image"</span> <span class="nv">alt</span><span class="o">=</span><span class="s2">"an image"</span>&gt;&lt;/a&gt;
+&lt;/p&gt;
+</code></pre>
+</div>
+
+<hr />
+
+<p>See: https://github.com/evilstreak/markdown-js/issues/24</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>markdown.js
+<span class="gp">&gt; </span>a
+
+<span class="gp">&gt; </span>b
+
+<span class="gp">&gt; </span>c
+^D
+&lt;blockquote&gt;&lt;p&gt;a&lt;/p&gt;&lt;p&gt;bundefined&amp;gt; c&lt;/p&gt;&lt;/blockquote&gt;
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>marked
+<span class="gp">&gt; </span>a
+
+<span class="gp">&gt; </span>b
+
+<span class="gp">&gt; </span>c
+^D
+&lt;blockquote&gt;&lt;p&gt;a
+
+&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;&lt;p&gt;b
+
+&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;&lt;p&gt;c
+&lt;/p&gt;&lt;/blockquote&gt;
+</code></pre>
+</div>
+
+<hr />
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>markdown.pl
+<span class="k">*</span> hello
+  <span class="k">*</span> world
+    how
+
+    are
+    you
+
+  <span class="k">*</span> today
+<span class="k">*</span> hi
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;hello&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;world
+how&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;are
+you&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;today&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;hi&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>marked
+<span class="k">*</span> hello
+  <span class="k">*</span> world
+    how
+
+    are
+    you
+
+  <span class="k">*</span> today
+<span class="k">*</span> hi
+^D
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;hello&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;world
+how&lt;/p&gt;
+&lt;p&gt;are
+you&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;today&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;hi&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+</div>
+
+</article>
+
+      </main>
+
+      <footer class="footer">
+        <small>
+          &copy; <time datetime="2017-02-13T23:53:47+05:30">2017</time>. All rights reserved.
+        </small>
+      </footer>
+    </div>
+
+    
+     <script id="dsq-count-scr" src="//chiraga.disqus.com/count.js" async>
+     </script>
+  </body>
+</html>

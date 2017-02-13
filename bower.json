@@ -1,0 +1,9 @@
+{
+  "name": "chira.ga",
+  "version": "0.0.0",
+  "dependencies": {
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.10",
+    "app-elements": "PolymerElements/app-elements#^0.10.1"
+  }
+}

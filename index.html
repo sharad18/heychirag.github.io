@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="index">
+    <script>
+     addEventListener('WebComponentsReady', function() {
+         var menuBtn=document.querySelector('#menuBtn');
+         var menu=document.querySelector('#menu');
+         console.log(menuBtn,menu);
+         $(menuBtn).on('click',function(){
+             menu.open();
+         });
+     });
+    </script>
+    <head>
+    <script src="/bower_components/webcomponentsjs/webcomponents-lite.min.js"> 
+    </script>
+    <script src="/js/jq.min.js">
+    </script>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+    
+      chira.ga &middot; rora
+    
+  </title>
+
+  <link rel="import" href="bower_components/app-layout/app-drawer/app-drawer.html">
+  <link rel="import" href="bower_components/app-layout/app-header/app-header.html">
+  <link rel="import" href="bower_components/app-layout/app-toolbar/app-toolbar.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+  <link rel="alternate" type="application/atom+xml" title="chira.ga" href="/atom.xml">
+</head>
+
+
+    <body>
+        <app-header fixed>
+            <app-toolbar>
+                <paper-icon-button icon="menu" id="menuBtn"></paper-icon-button>
+                <div main-title>App name</div>
+            </app-toolbar>
+        </app-header>
+
+        <!--div class="masthead"-->
+    <!--div class="blur"-->
+    <!--/div-->
+    <!--div id="menu-icon" onclick="menuToggle()"-->
+        <!--span></span-->
+        <!--span></span-->
+        <!--span></span-->
+        <!--span></span-->
+    <!--/div-->
+<!--/div-->
+
+<div class="front">
+    <center>
+        <span style="color:black;">chira.ga</span><span>rora</span>
+    </center>
+</div>
+
+<div class="posts">
+  
+  <article class="post">
+    <h1 class="post-title">
+      <a href="/introduction/">
+        Introduction
+      </a>
+    </h1>
+
+    <time datetime="2016-01-03T00:00:00+05:30" class="post-date">03 Jan 2016
+     • <a href="/introduction/#disqus_thread">0 Comments</a>
+    </time>
+
+    <p><em>The Strange Case of Dr. Jekyll and Mr. Hyde</em> tells the story of a lawyer investigating the connection of two persons, Dr. Henry Jekyll and Mr. Edward Hyde. Chief among the novel’s supporting cast is a man by the name of Mr. Poole, Dr. Jekyll’s loyal butler.</p>
+
+<hr />
+
+<p>Poole is the butler for <a href="http://jekyllrb.com">Jekyll</a>, the static site generator. It’s designed and developed by <a href="https://twitter.com/mdo">@mdo</a> to provide a clear and concise foundational setup for any Jekyll site. It does so by furnishing a full vanilla Jekyll install with example layouts, pages, posts, and styles.</p>
+
+<p>There are currently three themes built on Poole:</p>
+
+<ul>
+  <li><a href="http://hyde.getpoole.com">Hyde</a></li>
+  <li><a href="http://lanyon.getpoole.com">Lanyon</a></li>
+  <li><a href="http://enfield.getpoole.com">Enfield</a></li>
+</ul>
+
+<p>Learn more and contribute on <a href="https://github.com/poole/poole">GitHub</a>.</p>
+
+<h3 id="whats-included">What’s included</h3>
+
+<p>Poole is a streamlined Jekyll site designed and built as a foundation for building more meaningful themes. Poole, and every theme built on it like this one, includes the following:</p>
+
+<ul>
+  <li>Complete Jekyll setup included (layouts, config, <a href="/404.html">404</a>, <a href="/atom.xml">RSS feed</a>, posts, and <a href="/about">example page</a>)</li>
+  <li>Mobile friendly design and development</li>
+  <li>Easily scalable text and component sizing with <code class="highlighter-rouge">rem</code> units in the CSS</li>
+  <li>Support for a wide gamut of HTML elements</li>
+  <li>Related posts (time-based, because Jekyll) below each post</li>
+  <li>Syntax highlighting, courtesy Jekyll’s built-in support for Rouge</li>
+</ul>
+
+<p>Additional features are available in individual themes.</p>
+
+<h3 id="browser-support">Browser support</h3>
+
+<p>Poole and its themes are by preference a forward-thinking project. In addition to the latest versions of Chrome, Safari (mobile and desktop), and Firefox, it is only compatible with Internet Explorer 9 and above.</p>
+
+<h3 id="download">Download</h3>
+
+<p>These themes are developed on and hosted with GitHub. Head to the <a href="https://github.com/poole/poole">GitHub repository</a> for downloads, bug reports, and features requests.</p>
+
+<p>Thanks!</p>
+
+  </article>
+  
+</div>
+
+<div class="pagination">
+  
+    <a class="pagination-item older" href="/page2">Older</a>
+  
+  
+    <span class="pagination-item newer">Newer</span>
+  
+</div>
+
+
+        <app-drawer id="menu"></app-drawer>
+    </body>
+</html>
