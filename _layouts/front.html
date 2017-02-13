@@ -1,9 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" class="index">
-
+    <script>
+     addEventListener('WebComponentsReady', function() {
+         var menuBtn=document.querySelector('#menuBtn');
+         var menu=document.querySelector('#menu');
+         console.log(menuBtn,menu);
+         $(menuBtn).on('click',function(){
+             menu.open();
+         });
+     });
+    </script>
     {% include head.html %}
 
     <body>
+        <app-header reveals>
+            <app-toolbar>
+                <paper-icon-button icon="menu" id="menuBtn"></paper-icon-button>
+                <div main-title>App name</div>
+            </app-toolbar>
+        </app-header>
+
         {{ content }}
+
+        <app-drawer id="menu"></app-drawer>
     </body>
 </html>
